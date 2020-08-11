@@ -37,20 +37,28 @@ Characteristics of a Pure Function
 3) Never produce any side effects.
 */
 
+// Reducer function
 function todos (state = [], action) {
-  if (action.type === 'ADD_TODO') {
-    return state.concat([action.todo])
+  switch(action.type) {
+    case 'ADD_TODO' :
+      return state.concat([action.todo])
+    case 'REMOVE_TODO' :
+      return state.filter((todo) => todo.id !== action.id)
+    case 'TOGGLE_TODO' :
+      return state.map((todo) => todo.id !== action.id ? todo :
+        Object.assign({}, todo, {complete: !todo.complete})
+      )
+    default :
+      return state
   }
-
-  return state
 }
 
-function createStore () {
+function createStore (reducer) {
   // The store should have four parts
   // 1. The state
-  // 2. Get the state.
-  // 3. Listen to changes on the state.
-  // 4. Update the state
+  // 2. Get the state. (getState)
+  // 3. Listen to changes on the state. (subscribe)
+  // 4. Update the state (dispatch)
 
   let state
   let listeners = []
@@ -72,6 +80,8 @@ function createStore () {
   return {
     getState,
     subscribe,
-    dispatch
+    dispatch,
   }
 }
+
+const store = createStore(todos)
