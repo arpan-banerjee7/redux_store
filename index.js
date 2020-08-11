@@ -66,7 +66,6 @@ function addGoalAction(goal) {
   };
 }
 
-//will revert this comment
 function removeGoalAction(id) {
   return {
     type: REMOVE_GOAL,
