@@ -64,8 +64,14 @@ function createStore () {
     }
   }
 
+  const dispatch = (action) => {
+    state = reducer(state, action)
+    listeners.forEach((listener) => listener())
+  }
+
   return {
     getState,
     subscribe,
+    dispatch
   }
 }
