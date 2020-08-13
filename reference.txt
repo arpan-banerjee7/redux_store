@@ -195,3 +195,39 @@ function app(state = {}, action) {
 
       document.getElementById("goalBtn").addEventListener("click", addGoal);
 
+________________________________+++++++++++++++++++++++++++++++_________________________________
+//react-redux Library
+
+ function connect(mapStateToProps) {
+        return (Component) => {
+          class Receiver extends React.Component {
+            componentDidMount() {
+              const { subscribe } = this.props.store;
+
+              this.unsubcribe = subscribe(() => this.forceUpdate());
+            }
+            componentWillUnmount() {
+              this.unsubcribe();
+            }
+            render() {
+              const { dispatch, getState } = this.props.store;
+              const state = getState();
+              const stateNeeded = mapStateToProps(state);
+
+              return <Component {...stateNeeded} dispatch={dispatch} />;
+            }
+          }
+
+          class ConnectedComponent extends React.Component {
+            render() {
+              return (
+                <Context.Consumer>
+                  {(store) => <Receiver store={store} />}
+                </Context.Consumer>
+              );
+            }
+          }
+
+          return ConnectedComponent;
+        };
+      }
